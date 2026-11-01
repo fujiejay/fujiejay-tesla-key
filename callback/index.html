@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tesla 授权回调</title>
+<style>
+body{font:18px/1.5 system-ui,sans-serif;padding:32px;max-width:720px;margin:auto}
+code{display:block;word-break:break-all;background:#f4f4f4;padding:12px;border-radius:8px;margin:12px 0}
+.err{color:#b00020}
+</style>
+<body>
+<h1>授权结果</h1>
+<div id="out">正在读取…</div>
+<script>
+const p = new URLSearchParams(location.search);
+const out = document.getElementById('out');
+if (p.get('error')) {
+  out.innerHTML = '<p class="err">授权失败：' + p.get('error') + '<br>' + (p.get('error_description')||'') + '</p>';
+} else if (p.get('code')) {
+  out.innerHTML = '<p>授权成功。请把下面的授权码完整复制，发回给 Robin：</p><code id="c">' + p.get('code') + '</code><p>state: ' + (p.get('state')||'') + '</p><button id="b">复制授权码</button>';
+  document.getElementById('b').onclick = () => navigator.clipboard.writeText(p.get('code'));
+} else {
+  out.textContent = '没有收到授权码。完整地址：' + location.href;
+}
+</script>
+</body>
+</html>
